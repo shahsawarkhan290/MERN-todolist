@@ -11,8 +11,9 @@ res.send("server is working well");
 
 app.use(express.json());
 
-app.use("api/todos",todoRoutes) 
+app.use("/api/todos",todoRoutes) 
 
 app.listen(5000,()=>{
+    connectDB();
     console.log("server started ");
 }); 

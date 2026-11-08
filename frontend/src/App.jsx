@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import axios from "axios"
 
 function App() {
 const [newTodo, setNewTodo]=useState("");
@@ -8,12 +9,14 @@ const addTodo=async (e)=>{
   e.preventDefault();
   if(!newTodo.trim()) return;
   try {
-    const response=await fetch("http://localhost:500/api/todos",{
-      method:"POST"
+    const response=await axios.post("/api/todos",{
+      text:newTodo, 
+
+      
     })
     console.log(response)
 setTodos([...todos,response.data]);
-setNewTodo(" ");
+setNewTodo("");
 
   } catch (error) {
     console.log("ERROR ",error);
@@ -39,7 +42,7 @@ text-gray-700 placeholder-gray-400' type="text" value={newTodo} onChange={(e)=>s
 placeholder='Write what to be done'
 required/>
 <button type='submit' className='bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 
-rounded-md font-medium cursor-pointer'></button>
+rounded-md font-medium cursor-pointer'>Add Todo</button>
 </form>
 
     </div></div>
