@@ -1,9 +1,18 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from "axios"
+import {MdOutlineDone} from "react-icons/md";
+import {MdModeEditOutline} from "react-icons/md";
+import {FaTrash} from "react-icons/fa6"
+import {IoClose} from "react-icons/io5"
+import {IoClipboardOutline} from "react-icons/io5";
+
 
 function App() {
 const [newTodo, setNewTodo]=useState("");
 const [todos,setTodos]=useState([]);
+const [editingTodo,setEditingTodo]=useState(null);
+const [editedText , setEditedText]=useState("");
+
 
 const addTodo=async (e)=>{
   e.preventDefault();
@@ -22,6 +31,19 @@ setNewTodo("");
     console.log("ERROR ",error);
   }
 }
+const fetcTodos = async ()=>{
+ try {
+  const response=await axios.get("/api/todos");
+  console.log(response.data);
+  setTodos(response.data)
+ } catch (error) {
+  console.log("ERROR in todos in fetching ",error);
+ } 
+}
+
+useEffect(()=>{
+  fetcTodos();
+},[]);
 
   return (
 <div className='min-h-screen
@@ -44,6 +66,27 @@ required/>
 <button type='submit' className='bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 
 rounded-md font-medium cursor-pointer'>Add Todo</button>
 </form>
+<div>
+  {todos.length === 0 ?(
+    <div></div>
+  ):(
+    <div>
+      {todos.map((todo) => (
+        <div key={todo._id}>{editingTodo === todo._id}?(
+     <div>
+      <input type="text" value={editedText} onChange={
+        (e)=>setEditedText(e.target.value)
+      }/>
+     </div>
+      ):(
+        <div> <div>
+          <button><MdModeEditOutline /></button>
+          </div> </div>
+      )</div>
+      ))}
+    </div>
+  )}
+</div>
 
     </div></div>
   )
